@@ -1498,9 +1498,23 @@ function closeMenu() {
 }
 
 function submitForm() {
-  // In production: send to your backend / Formspree / EmailJS
-  document.getElementById('formSuccess').style.display = 'block';
-  document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth' });
+  const data = new FormData();
+  data.append('email', document.querySelector('input[type="email"]').value);
+  data.append('parent-name', document.querySelectorAll('input[type="text"]')[0].value);
+  data.append('student-name', document.querySelectorAll('input[type="text"]')[1].value);
+
+  fetch('https://formspree.io/f/mlgvlglb', {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  }).then(response => {
+    if (response.ok) {
+      document.getElementById('formSuccess').style.display = 'block';
+      document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth' });
+    }
+  }).catch(error => {
+    alert('Something went wrong. Please email us directly at hello@apexacademic.com');
+  });
 }
 
 // Intersection observer for scroll animations
